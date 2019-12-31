@@ -9,6 +9,8 @@ func _ready():
 	thisPlayer.set_network_master(get_tree().get_network_unique_id())
 	add_child(thisPlayer)
 	
+	
+	
 	#create other player(s)
 	var otherPlayer = preload("res://Player.tscn").instance()
 	otherPlayer.set_name(str(globals.otherPlayerId))
@@ -16,3 +18,4 @@ func _ready():
 	add_child(otherPlayer)
 	#make other player green
 	otherPlayer.makeGreen()
+	
