@@ -1,4 +1,5 @@
 extends KinematicBody2D
+var look_vec 
 #player variables
 const maxHealth = 3
 var currentHealth = maxHealth
@@ -15,11 +16,16 @@ func _ready():
 	timer.set_wait_time(fire_delay)
 	timer.connect("timeout", self, "on_timeout_complete")
 	add_child(timer)
-	
 	yield(get_tree(), "idle_frame")
+	
+func makeGreen():
+	modulate = Color(0,255,0)
 	
 slave func setPosition(pos):
 	position = pos
+	
+slave func setRotation(rot):
+	rotation = rot
 	
 master func shutItDown():
 	#send a shutdown command to all clients, including this one
@@ -29,9 +35,9 @@ sync func shutDown():
 	get_tree().quit()
 
 func _process(delta):
-	var look_vec = get_global_mouse_position() - global_position
 	var moveByX = 0
 	var moveByY = 0
+	var look_angle = 0
 	if(is_network_master()):
 		if Input.is_action_pressed("ui_left"):
 			moveByX = -5
@@ -41,9 +47,6 @@ func _process(delta):
 			moveByY = -5
 		if Input.is_action_pressed("ui_down"):
 			moveByY = 5
-
-		global_rotation = atan2(look_vec.y, look_vec.x)
-		print(global_rotation)
 		#shoot 
 		if Input.is_action_just_pressed("shoot") && can_shoot:
 			#create a ray
@@ -60,9 +63,18 @@ func _process(delta):
 			#if is_network_server():
 			#	shutItDown()
 			shutDown()
-			
+		#rotation assignment
+		look_vec = get_global_mouse_position() - global_position
+		look_angle += atan2(look_vec.y, look_vec.x)
+		rotation=look_angle
+		
 		#tell other computer about new position so it can update
-		rpc_unreliable("setPosition",Vector2(position.x - moveByX, position.y))
+		rpc_unreliable("setPosition",Vector2(position.x, position.y))
+		#update rotation variable
+		#rset_unreliable("look_angle", global_rotation)
+		rpc_unreliable("setRotation", look_angle)
+		#tell other computer about new rotation
+		print(str(look_angle) + "was just sent")
 		
 	#move local player
 	translate(Vector2(moveByX, moveByY))
