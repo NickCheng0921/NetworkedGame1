@@ -59,6 +59,11 @@ shoot={
  ]
 }
 
+[layer_names]
+
+2d_physics/layer_5="Player"
+2d_physics/layer_6="Walls"
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"

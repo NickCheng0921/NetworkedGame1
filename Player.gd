@@ -9,8 +9,16 @@ var timer = null
 var fire_delay = 0.35
 var can_shoot = true
 onready var raycast = $RayCast2D
+#check that frames are synchronized
+var frame = 0
+var second = 0
 
 func _ready():
+	#added in camera
+	if is_network_master():
+        var cam = Camera2D.new()
+        cam.current = true
+        add_child(cam)
 	if is_network_master():
 		var cam = Camera2D.new()
 		cam.current = true
@@ -39,6 +47,13 @@ sync func shutDown():
 	get_tree().quit()
 
 func _process(delta):
+	if(frame == 60):
+		print(str(second) + " second passed")
+		second += 1
+		frame = 0
+	else:
+		frame += 1
+		
 	var moveByX = 0
 	var moveByY = 0
 	var look_angle = 0
@@ -77,8 +92,6 @@ func _process(delta):
 		#update rotation variable
 		#rset_unreliable("look_angle", global_rotation)
 		rpc_unreliable("setRotation", look_angle)
-		#tell other computer about new rotation
-		print(str(look_angle) + "was just sent")
 		
 	#move local player
 	translate(Vector2(moveByX, moveByY))
