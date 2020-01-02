@@ -14,6 +14,10 @@ var frame = 0
 var second = 0
 
 func _ready():
+	if is_network_master():
+		var cam = Camera2D.new()
+		cam.current = true
+		add_child(cam)
 	timer = Timer.new()
 	timer.set_one_shot(true)
 	timer.set_wait_time(fire_delay)
