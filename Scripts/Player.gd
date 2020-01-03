@@ -8,6 +8,9 @@ var attackDamage = 3
 var timer = null
 var fire_delay = 0.35
 var can_shoot = true
+
+export var moveSpeed = 200.0
+
 onready var raycast = $RayCast2D
 #check that frames are synchronized
 var frame = 0
@@ -43,10 +46,18 @@ master func shutItDown():
 	#send a shutdown command to all clients, including this one
 	rpc("shutDown")
 
+master func reloadTheScene():
+	rpc("reloadScene")
+
 sync func shutDown():
 	get_tree().quit()
+	
+sync func reloadScene():
+	get_tree().reload_current_scene()
 
 func _process(delta):
+	
+	
 	if(frame == 60):
 		print(str(second) + " second passed")
 		second += 1
@@ -59,13 +70,13 @@ func _process(delta):
 	var look_angle = 0
 	if(is_network_master()):
 		if Input.is_action_pressed("ui_left"):
-			moveByX = -5
+			moveByX = -1
 		if Input.is_action_pressed("ui_right"):
-			moveByX = 5
+			moveByX = 1
 		if Input.is_action_pressed("ui_up"):
-			moveByY = -5
+			moveByY = -1
 		if Input.is_action_pressed("ui_down"):
-			moveByY = 5
+			moveByY = 1
 		#shoot 
 		if Input.is_action_just_pressed("shoot") && can_shoot:
 			#create a ray
@@ -94,11 +105,14 @@ func _process(delta):
 		rpc_unreliable("setRotation", look_angle)
 		
 	#move local player
-	translate(Vector2(moveByX, moveByY))
+	move_and_slide(Vector2(moveByX, moveByY)*moveSpeed)
 		
 func on_timeout_complete():
 	can_shoot = true
+
+
 func playerHit(damage):
 	currentHealth -= damage
 	if(currentHealth <= 0):
-		queue_free()
+		#queue_free()
+		shutItDown()

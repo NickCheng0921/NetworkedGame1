@@ -9,7 +9,7 @@ func _player_connected(id):
 	print("Player connected to server!")
 	globals.otherPlayerId = id
 	#on both machines, preload scenes and make it active scene as well as hide lobby
-	var game = preload("res://Game.tscn").instance()
+	var game = preload("res://scenes/Game.tscn").instance()
 	get_tree().get_root().add_child(game)
 	hide()
 
