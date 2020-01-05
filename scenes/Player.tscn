@@ -1,10 +1,11 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
-[ext_resource path="res://Sprites/icon.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/soldier.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/icon.png" type="Texture" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 27, 28 )
+extents = Vector2( 21.5205, 21.555 )
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 16
@@ -13,6 +14,7 @@ script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
+offset = Vector2( 15, 0 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
@@ -26,4 +28,4 @@ collision_mask = 16
 [node name="Sprite" type="Sprite" parent="RayCast2D"]
 position = Vector2( 249.247, 1.21555 )
 scale = Vector2( 7.66805, 0.0614246 )
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
