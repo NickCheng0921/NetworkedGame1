@@ -56,15 +56,7 @@ sync func reloadScene():
 	get_tree().reload_current_scene()
 
 func _process(delta):
-	
-	
-	if(frame == 60):
-		print(str(second) + " second passed")
-		second += 1
-		frame = 0
-	else:
-		frame += 1
-		
+
 	var moveByX = 0
 	var moveByY = 0
 	var look_angle = 0
