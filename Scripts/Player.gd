@@ -17,7 +17,7 @@ var frame = 0
 var second = 0
 
 func _ready():
-	#added in camera
+	#added in camera as child of player
 	if is_network_master():
         var cam = Camera2D.new()
         cam.current = true
@@ -46,14 +46,14 @@ master func shutItDown():
 	#send a shutdown command to all clients, including this one
 	rpc("shutDown")
 
-master func reloadTheScene():
-	rpc("reloadScene")
-
+master func killMyPlayer():
+	rpc("killMe")
+	
 sync func shutDown():
 	get_tree().quit()
 	
-sync func reloadScene():
-	get_tree().reload_current_scene()
+sync func killMe():
+	queue_free()
 
 func _process(delta):
 
@@ -107,4 +107,4 @@ func playerHit(damage):
 	currentHealth -= damage
 	if(currentHealth <= 0):
 		#queue_free()
-		shutItDown()
+		killMyPlayer()
