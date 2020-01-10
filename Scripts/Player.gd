@@ -46,9 +46,6 @@ master func shutItDown():
 	#send a shutdown command to all clients, including this one
 	rpc("shutDown")
 
-master func resetMyPosition():
-	rpc("resetPos")
-	
 sync func shutDown():
 	get_tree().quit()
 	
@@ -107,5 +104,5 @@ func on_timeout_complete():
 func playerHit(damage):
 	currentHealth -= damage
 	if(currentHealth <= 0):
-		#queue_free()
-		resetMyPosition()
+		rpc("resetPos")
+
