@@ -16,12 +16,12 @@ _global_script_class_icons={
 [application]
 
 config/name="NetworkedGame"
-run/main_scene="res://Lobby.tscn"
-config/icon="res://icon.png"
+run/main_scene="res://scenes/Lobby.tscn"
+config/icon="res://Sprites/icon.png"
 
 [autoload]
 
-globals="*res://globals.gd"
+globals="*res://Scripts/globals.gd"
 
 [input]
 
@@ -58,6 +58,11 @@ shoot={
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
+
+[layer_names]
+
+2d_physics/layer_5="Player"
+2d_physics/layer_6="Walls"
 
 [rendering]
 

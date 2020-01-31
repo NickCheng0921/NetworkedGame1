@@ -9,7 +9,7 @@ func _player_connected(id):
 	print("Player connected to server!")
 	globals.otherPlayerId = id
 	#on both machines, preload scenes and make it active scene as well as hide lobby
-	var game = preload("res://Game.tscn").instance()
+	var game = preload("res://scenes/Game.tscn").instance()
 	get_tree().get_root().add_child(game)
 	hide()
 
@@ -29,11 +29,12 @@ func _on_buttonJoin_pressed():
 	print("Joining network")
 	var host = NetworkedMultiplayerENet.new()
 	#nick laptop
-	host.create_client("25.86.169.225", 4242)
+	#host.create_client("25.86.169.225", 4242)
 	#timothys ip
 	#host.create_client("25.86.170.10", 4242)
 	#nick pc
 	#host.create_client("192.168.1.121", 4242)
+	host.create_client("127.0.0.1", 4242)
 	get_tree().set_network_peer(host)
 	$buttonHost.hide()
 	$buttonJoin.disabled = true

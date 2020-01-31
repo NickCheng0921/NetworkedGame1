@@ -5,24 +5,42 @@ const maxHealth = 3
 var currentHealth = maxHealth
 var attackDamage = 3
 #firing delay
-var timer = null
+var timerShoot = null
 var fire_delay = 0.35
 var can_shoot = true
+#respawn timer
+var timerRespawn = null 
+var can_respawn = false
+var respawn_delay = 1.00
+
+
+export var moveSpeed = 200.0
+
 onready var raycast = $RayCast2D
-#check that frames are synchronized
-var frame = 0
-var second = 0
+
 
 func _ready():
+	#added in camera as child of player
+	if is_network_master():
+        var cam = Camera2D.new()
+        cam.current = true
+        add_child(cam)
 	if is_network_master():
 		var cam = Camera2D.new()
 		cam.current = true
 		add_child(cam)
-	timer = Timer.new()
-	timer.set_one_shot(true)
-	timer.set_wait_time(fire_delay)
-	timer.connect("timeout", self, "on_timeout_complete")
-	add_child(timer)
+	timerShoot = Timer.new()
+	timerShoot.set_one_shot(true)
+	timerShoot.set_wait_time(fire_delay)
+	timerShoot.connect("timeout", self, "on_shoottimeout_complete")
+	add_child(timerShoot)
+	yield(get_tree(), "idle_frame")
+	#create respawn timer
+	timerRespawn = Timer.new()
+	timerRespawn.set_one_shot(true)
+	timerRespawn.set_wait_time(respawn_delay)
+	timerRespawn.connect("timeout", self, "on_respawntimeout_complete")
+	add_child(timerRespawn)
 	yield(get_tree(), "idle_frame")
 	
 func makeGreen():
@@ -40,27 +58,30 @@ master func shutItDown():
 
 sync func shutDown():
 	get_tree().quit()
+	
+sync func resetPos():
+	print("respawning")
+	#hides player, then runs a timer, then respawns in new place, then shows
+	hide()
+	print("starting timer")
+	timerRespawn.start()
+	get_node(".").set_position(Vector2(0,0))
+	rpc("setPosition", Vector2(0,0))
+
 
 func _process(delta):
-	if(frame == 60):
-		print(str(second) + " second passed")
-		second += 1
-		frame = 0
-	else:
-		frame += 1
-		
 	var moveByX = 0
 	var moveByY = 0
 	var look_angle = 0
 	if(is_network_master()):
 		if Input.is_action_pressed("ui_left"):
-			moveByX = -5
+			moveByX = -1
 		if Input.is_action_pressed("ui_right"):
-			moveByX = 5
+			moveByX = 1
 		if Input.is_action_pressed("ui_up"):
-			moveByY = -5
+			moveByY = -1
 		if Input.is_action_pressed("ui_down"):
-			moveByY = 5
+			moveByY = 1
 		#shoot 
 		if Input.is_action_just_pressed("shoot") && can_shoot:
 			#create a ray
@@ -69,8 +90,8 @@ func _process(delta):
 		        coll.playerHit(attackDamage)
 			#firing delay
 			can_shoot = false
-			#start timer
-			timer.start()
+			#start timer for fire 
+			timerShoot.start()
 
 		if Input.is_key_pressed(KEY_Q):
 			#only let host shutdown
@@ -89,11 +110,18 @@ func _process(delta):
 		rpc_unreliable("setRotation", look_angle)
 		
 	#move local player
-	translate(Vector2(moveByX, moveByY))
+	move_and_slide(Vector2(moveByX, moveByY)*moveSpeed)
 		
-func on_timeout_complete():
+func on_shoottimeout_complete():
 	can_shoot = true
+
+func on_respawntimeout_complete():
+	show()
+	
 func playerHit(damage):
 	currentHealth -= damage
 	if(currentHealth <= 0):
-		queue_free()
+		print("Player took lethal damage")
+		rpc("resetPos")
+
+
