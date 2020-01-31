@@ -13,7 +13,6 @@ var timerRespawn = null
 var can_respawn = false
 var respawn_delay = 1.00
 
-
 export var moveSpeed = 200.0
 
 onready var raycast = $RayCast2D
@@ -68,8 +67,8 @@ sync func resetPos():
 	get_node(".").set_position(Vector2(0,0))
 	rpc("setPosition", Vector2(0,0))
 
-
 func _process(delta):
+
 	var moveByX = 0
 	var moveByY = 0
 	var look_angle = 0
@@ -123,5 +122,3 @@ func playerHit(damage):
 	if(currentHealth <= 0):
 		print("Player took lethal damage")
 		rpc("resetPos")
-
-
