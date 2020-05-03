@@ -29,12 +29,12 @@ func _on_buttonJoin_pressed():
 	print("Joining network")
 	var host = NetworkedMultiplayerENet.new()
 	#nick laptop
-	#host.create_client("25.86.169.225", 4242)
+	host.create_client("192.168.86.24", 4242)
 	#timothys ip
 	#host.create_client("25.86.170.10", 4242)
 	#nick pc
 	#host.create_client("192.168.1.121", 4242)
-	host.create_client("127.0.0.1", 4242)
+	#host.create_client("127.0.0.1", 4242)
 	get_tree().set_network_peer(host)
 	$buttonHost.hide()
 	$buttonJoin.disabled = true

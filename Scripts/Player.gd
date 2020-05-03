@@ -64,6 +64,7 @@ sync func resetPos():
 	hide()
 	print("starting timer")
 	timerRespawn.start()
+	#setPositions below look redundant maybe one can be removed
 	get_node(".").set_position(Vector2(0,0))
 	rpc("setPosition", Vector2(0,0))
 
