@@ -45,10 +45,10 @@ func _ready():
 func makeGreen():
 	modulate = Color(0,255,0)
 	
-slave func setPosition(pos):
+puppet func setPosition(pos):
 	position = pos
 	
-slave func setRotation(rot):
+puppet func setRotation(rot):
 	rotation = rot
 	
 master func shutItDown():
