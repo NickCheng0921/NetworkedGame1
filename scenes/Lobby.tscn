@@ -13,10 +13,25 @@ margin_bottom = 89.0
 text = "Host Game"
 
 [node name="buttonJoin" type="Button" parent="."]
-margin_left = 164.0
-margin_top = 138.0
-margin_right = 412.0
-margin_bottom = 194.0
+margin_left = 168.0
+margin_top = 180.0
+margin_right = 416.0
+margin_bottom = 236.0
 text = "Join Game"
+
+[node name="connectInstruction" type="RichTextLabel" parent="."]
+margin_left = 106.0
+margin_top = 134.0
+margin_right = 521.0
+margin_bottom = 171.0
+text = "Edit above address to connect to different servers
+Host is on local machine, edit address to connect to other ip"
+
+[node name="connectIP" type="TextEdit" parent="."]
+margin_left = 106.0
+margin_top = 104.0
+margin_right = 447.0
+margin_bottom = 126.0
+text = "127.0.0.1"
 [connection signal="pressed" from="buttonHost" to="." method="_on_buttonHost_pressed"]
 [connection signal="pressed" from="buttonJoin" to="." method="_on_buttonJoin_pressed"]

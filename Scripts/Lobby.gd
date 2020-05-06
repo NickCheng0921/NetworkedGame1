@@ -17,6 +17,7 @@ func _on_buttonHost_pressed():
 	print("Hosting network")
 	var host  = NetworkedMultiplayerENet.new()
 	var res = host.create_server(4242,2)
+	#4242 is port and 2 is number of max players (I believe)+llf-
 	if res != OK:
 		print("Error creating server")
 		return
@@ -28,13 +29,8 @@ func _on_buttonHost_pressed():
 func _on_buttonJoin_pressed():
 	print("Joining network")
 	var host = NetworkedMultiplayerENet.new()
-	#nick laptop
-	host.create_client("192.168.86.24", 4242)
-	#timothys ip
-	#host.create_client("25.86.170.10", 4242)
-	#nick pc
-	#host.create_client("192.168.1.121", 4242)
-	#host.create_client("127.0.0.1", 4242)
+	var targetIP = $connectIP.get_text()
+	host.create_client(targetIP, 4242)
 	get_tree().set_network_peer(host)
 	$buttonHost.hide()
 	$buttonJoin.disabled = true
